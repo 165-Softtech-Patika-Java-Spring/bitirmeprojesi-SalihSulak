@@ -85,6 +85,10 @@
             <artifactId>bootstrap</artifactId>
             <version>4.0.0-2</version>
         </dependency>
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

@@ -12,4 +12,5 @@ import java.util.UUID;
 public interface VatRateRepository extends JpaRepository<VatRate, UUID> {
     @Query("select v.vatPercentage from VatRate v where v.productType=?1")
     Short findVatPercentageByProductType(ProductType productType);
+
 }

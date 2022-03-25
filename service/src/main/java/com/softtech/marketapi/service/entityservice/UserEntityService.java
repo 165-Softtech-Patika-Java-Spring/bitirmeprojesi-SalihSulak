@@ -1,7 +1,5 @@
 package com.softtech.marketapi.service.entityservice;
 
-import com.softtech.marketapi.dto.request.UserSaveRequestDto;
-import com.softtech.marketapi.dto.response.UserSaveResponseDto;
 import com.softtech.marketapi.entity.User;
 import com.softtech.marketapi.enums.errors.UserErrorMessages;
 import com.softtech.marketapi.generic.exceptions.GenericBusinessException;
@@ -18,7 +16,7 @@ public class UserEntityService {
     private final UserRepository userRepository;
 
     public User saveUser(User user){
-        userRepository.save(user);
+        User save = userRepository.save(user);
         return user;
     }
     public User findById(UUID id){

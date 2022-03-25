@@ -28,16 +28,16 @@ public class ProductService {
     private final ProductEntityService productEntityService;
     private final VatRateEntityService vatRateEntityService;
     private final PriceUtil priceUtil;
-
+    private final ProductMapper productMapper = ProductMapper.INSTANCE;
     public ProductResponseDto saveProduct(ProductDto productDto){
         if (productDto.getPriceWithoutVat().compareTo(BigDecimal.ZERO) <= 0)
             throw new GenericBusinessException(ProductErrorMessages.PRODUCT_PRICE_NOT_POSITIVE);
 
-        Product product = ProductMapper.INSTANCE.convertDtoToProduct(productDto);
+        Product product = productMapper.convertDtoToProduct(productDto);
         setPriceWithVat(product);
 
-        productEntityService.saveProduct(product);
-        ProductResponseDto productResponseDto = ProductMapper.INSTANCE.convertToResponseDto(product);
+        Product saveProduct = productEntityService.saveProduct(product);
+        ProductResponseDto productResponseDto = productMapper.convertToResponseDto(saveProduct);
         return productResponseDto;
     }
 
@@ -50,13 +50,13 @@ public class ProductService {
 
         productEntityService.saveProduct(product);
 
-        ProductResponseDto productResponseDto = ProductMapper.INSTANCE.convertToResponseDto(product);
+        ProductResponseDto productResponseDto = productMapper.convertToResponseDto(product);
         return productResponseDto;
     }
 
     public List<ProductResponseDto> findByProductType(ProductType productType){
         List<Product> productList = productEntityService.findByProductType(productType);
-        return ProductMapper.INSTANCE.convertToResponseList(productList);
+        return productMapper.convertToResponseList(productList);
     }
 
     public List<ProductResponseDto> listProductsWithFilter(Optional<Short> minPrice, Optional<Short> maxPrice) {
@@ -65,7 +65,7 @@ public class ProductService {
         if (minPrice.isEmpty()&&maxPrice.isEmpty()){
             productList = productEntityService.findAllProducts();
             throwExceptionIfListEmpty(productList);
-            return ProductMapper.INSTANCE.convertToResponseList(productList);
+            return productMapper.convertToResponseList(productList);
         }
         else {
             BigDecimal minPriceBigDecimal;
@@ -77,17 +77,17 @@ public class ProductService {
 
                 productList = productEntityService.findByPriceWithVatBetween(minPriceBigDecimal, maxPriceBigDecimal);
                 throwExceptionIfListEmpty(productList);
-                return ProductMapper.INSTANCE.convertToResponseList(productList);
+                return productMapper.convertToResponseList(productList);
             } else if (minPrice.isPresent()) {
                 minPriceBigDecimal = BigDecimal.valueOf(minPrice.get());
                 productList = productEntityService.listByPriceGreaterThan(minPriceBigDecimal);
                 throwExceptionIfListEmpty(productList);
-                return ProductMapper.INSTANCE.convertToResponseList(productList);
+                return productMapper.convertToResponseList(productList);
             } else {
                 maxPriceBigDecimal = BigDecimal.valueOf(maxPrice.get());
                 productList = productEntityService.listByPriceLessThan(maxPriceBigDecimal);
                 throwExceptionIfListEmpty(productList);
-                return ProductMapper.INSTANCE.convertToResponseList(productList);
+                return productMapper.convertToResponseList(productList);
             }
         }
     }

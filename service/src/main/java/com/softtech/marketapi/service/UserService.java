@@ -14,10 +14,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -43,16 +41,16 @@ public class UserService {
             user.setBaseAdditionalFields(baseAdditionalFields);
         }
 
-        userEntityService.saveUser(user);
-        UserSaveResponseDto userSaveResponseDto = UserMapper.INSTANCE.userToSaveResponse(user);
+        User savedUser = userEntityService.saveUser(user);
+        UserSaveResponseDto userSaveResponseDto = UserMapper.INSTANCE.userToSaveResponse(savedUser);
         return userSaveResponseDto;
     }
 
     public UserUpdateResponseDto updateUser(UserUpdateRequestDto updateRequest){
         User updatedUser = getUpdatedUser(updateRequest);
-        userEntityService.saveUser(updatedUser);
+        User user = userEntityService.saveUser(updatedUser);
 
-        UserUpdateResponseDto userUpdateResponseDto = UserMapper.INSTANCE.userToUpdateResponse(updatedUser);
+        UserUpdateResponseDto userUpdateResponseDto = UserMapper.INSTANCE.userToUpdateResponse(user);
         return userUpdateResponseDto;
     }
 

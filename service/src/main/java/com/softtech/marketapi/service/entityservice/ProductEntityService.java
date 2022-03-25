@@ -31,7 +31,10 @@ public class ProductEntityService {
     }
 
     public List<Product> findAllProducts(){
-        return productRepository.findAll();
+        List<Product> productList = productRepository.findAll();
+        if (productList.isEmpty())
+            throw new GenericBusinessException(ProductErrorMessages.PRODUCT_NOT_FOUND);
+        return productList;
     }
 
     public List<Product> findByProductType(ProductType productType){
@@ -45,21 +48,29 @@ public class ProductEntityService {
 
     public List<Product> findByPriceWithVatBetween(BigDecimal minPrice, BigDecimal maxPrice){
         List<Product> productList = productRepository.findByPriceWithVatBetween(minPrice, maxPrice);
+        if (productList.isEmpty())
+            throw new GenericBusinessException(ProductErrorMessages.PRODUCT_NOT_FOUND);
         return productList;
     }
 
     public List<Product> listByPriceGreaterThan(BigDecimal minPrice){
         List<Product> productList = productRepository.findByPriceWithVatGreaterThan(minPrice);
+        if (productList.isEmpty())
+            throw new GenericBusinessException(ProductErrorMessages.PRODUCT_NOT_FOUND);
         return productList;
     }
 
     public List<Product> listByPriceLessThan(BigDecimal maxPrice){
         List<Product> productList = productRepository.findByPriceWithVatLessThan(maxPrice);
+        if (productList.isEmpty())
+            throw new GenericBusinessException(ProductErrorMessages.PRODUCT_NOT_FOUND);
         return productList;
     }
     
     public List<ProductTypeStatsDto> getProductTypeStats(ProductType productType){
         List<ProductTypeStatsDto> productTypeStats = productRepository.getProductTypeStats(productType);
+        if (productTypeStats.isEmpty())
+            throw new GenericBusinessException(ProductErrorMessages.PRODUCT_STATS_NOT_FOUND);
         return productTypeStats;
     }
 
